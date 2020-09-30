@@ -25,7 +25,6 @@ package leetcode.editor.en;
 
 public class MergeTwoSortedLists {
     public static void main(String[] args) {
-
         Solution solution = new MergeTwoSortedLists().new Solution();
 //        ListNode l1 = new MergeTwoSortedLists().new ListNode(4);
 //        l1 = l1.add(2);
