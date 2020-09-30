@@ -53,7 +53,7 @@ System.out.println(deque);
 
 ![](.README_images/ea90ecfb.png)
 
-PriorityQueue 继承自Queue接口，因此实现了该接口，同时按照队列元素的大小进行重新排序。因此当调用peek()或者是poll()的方法取出队列中的元素通常都是最小或最大的元素。
+PriorityQueue实现了Queue接口，同时按照队列元素的大小进行重新排序。因此当调用peek()或者是poll()的方法取出队列中的元素通常都是最小或最大的元素。
 
 优先队列的实现其实底层使用的是堆，初始化时将集合对象进行堆化，使用了siftdown()函数；而调用poll()时会将堆顶元素返回，并再次执行siftdown()操作
 
