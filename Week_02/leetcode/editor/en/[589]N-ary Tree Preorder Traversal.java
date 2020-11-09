@@ -60,8 +60,7 @@ class Node {
 };
 */
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 class Solution {
     List<Integer> list = new LinkedList<>();
@@ -77,7 +76,21 @@ class Solution {
     }
 
     public List<Integer> preorder(Node root) {
-
+//        Stack<Integer> stack = new Stack<>();
+        Deque<Node> stack = new ArrayDeque<>();
+        if (root == null) {
+            return list;
+        }
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            Node node = stack.pop();
+            list.add(node.val);
+            Collections.reverse(node.children);
+            for (Node n: node.children) {
+                stack.push(n);
+            }
+        }
+        return list;
     }
 
 }
