@@ -58,7 +58,10 @@
 
 //leetcode submit region begin(Prohibit modification and deletion)
 
+
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 /**
@@ -78,12 +81,43 @@ import java.util.List;
  */
 class Solution {
     List<Integer> list = new ArrayList<>();
-    public List<Integer> inorderTraversal(TreeNode root) {
+    public List<Integer> inorderTraversal1(TreeNode root) {
         if (root != null) {
-            list = inorderTraversal(root.left);
+            list = inorderTraversal1(root.left);
             list.add(root.val);
-            list = inorderTraversal(root.right);
+            list = inorderTraversal1(root.right);
         }
+        return list;
+    }
+
+    public List<Integer> inorderTraversal(TreeNode root) {
+        if (root == null) {
+            return new ArrayList<>();
+        }
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        if (root.right != null) {
+            stack.push(root.right);
+        }
+        stack.push(root);
+        if (root.left != null) {
+            stack.push(root.left);
+        }
+        TreeNode n = stack.pop();
+//        while (!stack.isEmpty() && n.right != null) {
+//            if (n.right != null) {
+//                stack.push(n.right);
+//            }
+//            stack.push(n);
+//            if (n.left != null) {
+//                stack.push(n.left);
+//            }
+//            n = stack.pop();
+//        }
+//
+//        while (!stack.isEmpty()) {
+//            n = stack.pop();
+//            list.add(n.val);
+//        }
         return list;
     }
 
