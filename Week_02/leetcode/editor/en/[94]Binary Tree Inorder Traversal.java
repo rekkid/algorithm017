@@ -102,8 +102,8 @@ class Solution {
         if (root.left != null) {
             stack.push(root.left);
         }
-        TreeNode n = stack.pop();
-//        while (!stack.isEmpty() && n.right != null) {
+//        TreeNode n = stack.pop();
+//        while (n.left != null || n.right != null) {
 //            if (n.right != null) {
 //                stack.push(n.right);
 //            }
@@ -113,6 +113,24 @@ class Solution {
 //            }
 //            n = stack.pop();
 //        }
+
+        while (!stack.isEmpty()) {
+            TreeNode n = stack.pop();
+
+
+            if (n.right != null) {
+                stack.push(n.right);
+            }
+            stack.push(n);
+            if (n.left != null) {
+                stack.push(n.left);
+            }
+            if (n.left == null && n.right == null) {
+                list.add(n.val);
+            }
+        }
+
+
 //
 //        while (!stack.isEmpty()) {
 //            n = stack.pop();
