@@ -94,48 +94,18 @@ class Solution {
         if (root == null) {
             return new ArrayList<>();
         }
-        Deque<TreeNode> stack = new ArrayDeque<>();
-        if (root.right != null) {
-            stack.push(root.right);
-        }
-        stack.push(root);
-        if (root.left != null) {
-            stack.push(root.left);
-        }
-//        TreeNode n = stack.pop();
-//        while (n.left != null || n.right != null) {
-//            if (n.right != null) {
-//                stack.push(n.right);
-//            }
-//            stack.push(n);
-//            if (n.left != null) {
-//                stack.push(n.left);
-//            }
-//            n = stack.pop();
-//        }
-
-        while (!stack.isEmpty()) {
-            TreeNode n = stack.pop();
-
-
-            if (n.right != null) {
-                stack.push(n.right);
+        Deque<TreeNode> stack = new LinkedList<TreeNode>();
+        TreeNode node = root;
+        while (node != null || !stack.isEmpty()) {
+            while (node != null) {
+                stack.push(node);
+                node = node.left;
             }
-            stack.push(n);
-            if (n.left != null) {
-                stack.push(n.left);
-            }
-            if (n.left == null && n.right == null) {
-                list.add(n.val);
-            }
+            node = stack.pop();
+            list.add(node.val);
+            node = node.right;
         }
 
-
-//
-//        while (!stack.isEmpty()) {
-//            n = stack.pop();
-//            list.add(n.val);
-//        }
         return list;
     }
 
