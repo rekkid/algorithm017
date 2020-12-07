@@ -59,6 +59,7 @@
 //leetcode submit region begin(Prohibit modification and deletion)
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -88,7 +89,23 @@ class Solution {
     }
 
     public List<Integer> preorderTraversal(TreeNode root) {
+        if (root == null) {
+            return new ArrayList<>();
+        }
+        Deque<TreeNode> stack = new LinkedList<TreeNode>();
 
+        TreeNode node = root;
+        while (node != null || !stack.isEmpty()) {
+            while (node != null) {
+                result.add(node.val);
+                stack.push(node);
+                node = node.left;
+            }
+            node = stack.pop();
+            node = node.right;
+        }
+
+        return result;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
