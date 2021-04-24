@@ -39,7 +39,7 @@ func TestClimbingStairs(t *testing.T) {
 		{3, 3},
 	}
 	for _, tt := range climbStairsTests {
-		actual := climbStairs(tt.in)
+		actual := climbStairsWithMemo(tt.in)
 		if actual != tt.expected {
 			t.Errorf("moveZeroes(%v) = %v; expected %v", tt.in, actual, tt.expected)
 		}
@@ -47,9 +47,42 @@ func TestClimbingStairs(t *testing.T) {
 }
 
 //leetcode submit region begin(Prohibit modification and deletion)
-
 func climbStairs(n int) int {
-	if n == 1 || n == 2 {
+	if n <= 2 {
+		return n
+	}
+	a, b, c := 1, 1, 0
+	for i := 1; i < n; i++ {
+		c = a + b
+		a = b
+		b = c
+	}
+	return c
+}
+
+func climbStairsWithMemo(n int) int {
+	memo := make([]int, n+1)
+	result := dfs(0, n, memo)
+	return result
+}
+
+// 从第stat走到n总共有多少种走法
+func dfs(start int, n int, memo []int) int {
+	if start > n {
+		return 0
+	}
+	if start == n {
+		return 1
+	}
+	if memo[start] != 0 {
+		return memo[start]
+	}
+	memo[start] = dfs(start+1, n, memo) + dfs(start+2, n, memo)
+	return memo[start]
+}
+
+func climbStairs1(n int) int {
+	if n <= 2 {
 		return n
 	}
 	first, second := 1, 1
