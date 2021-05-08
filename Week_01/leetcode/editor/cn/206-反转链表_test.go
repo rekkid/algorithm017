@@ -49,6 +49,11 @@ func TestReverseLinkedList(t *testing.T) {
 
 }
 
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
+
 //leetcode submit region begin(Prohibit modification and deletion)
 /**
  * Definition for singly-linked list.
@@ -57,11 +62,6 @@ func TestReverseLinkedList(t *testing.T) {
  *     Next *ListNode
  * }
  */
-
-//type ListNode struct {
-//	Val  int
-//	Next *ListNode
-//}
 
 func reverseList(head *ListNode) *ListNode {
 	var prev *ListNode

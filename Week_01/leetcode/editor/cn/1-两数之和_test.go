@@ -54,7 +54,7 @@ func TestTwoSum(t *testing.T) {
 		target int
 	}
 	var threeSumTests = []struct {
-		in       input
+		input
 		expected []int
 	}{
 		{input{[]int{2, 7, 11, 15}, 9}, []int{0, 1}},
@@ -62,9 +62,9 @@ func TestTwoSum(t *testing.T) {
 		{input{[]int{3, 3}, 6}, []int{0, 1}},
 	}
 	for _, tt := range threeSumTests {
-		actual := twoSum(tt.in.nums, tt.in.target)
+		actual := twoSum(tt.nums, tt.target)
 		if !reflect.DeepEqual(actual, tt.expected) {
-			t.Errorf("threeSum(%v) = %v; expected %v", tt.in, actual, tt.expected)
+			t.Errorf("threeSum(%v) = %v; expected %v", tt.input, actual, tt.expected)
 		}
 	}
 }
