@@ -36,7 +36,7 @@ func TestLargestRectangleInHistogram(t *testing.T) {
 		height   []int
 		expected int
 	}{
-		//{[]int{2, 1, 5, 6, 2, 3}, 10},
+		{[]int{2, 1, 5, 6, 2, 3}, 10},
 		{[]int{2, 1, 2}, 3},
 	}
 	for _, tt := range largestRectangleAreaTests {
@@ -48,52 +48,103 @@ func TestLargestRectangleInHistogram(t *testing.T) {
 }
 
 //leetcode submit region begin(Prohibit modification and deletion)
-type Area struct {
+type Bar struct {
 	height int
-	width  int
+	index  int
 }
 
 func largestRectangleArea(heights []int) int {
+	maxArea := 0
+	n := len(heights) + 2
+	// Add a sentry at the beginning and the end
+	getHeight := func(i int) int {
+		if i == 0 || n-1 == i {
+			return 0
+		}
+		return heights[i-1]
+	}
+	stack := make([]int, 0, n/2)
+	for i := 0; i < n; i++ {
+		for len(stack) > 0 && getHeight(stack[len(stack)-1]) > getHeight(i) {
+			// pop stack
+			idx := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			maxArea = max(maxArea, getHeight(idx)*(i-stack[len(stack)-1]-1))
+		}
+		// push stack
+		stack = append(stack, i)
+	}
+	return maxArea
+}
+
+func largestRectangleArea2(heights []int) int {
+	n := len(heights)
+	left, right := make([]int, n), make([]int, n)
+	for i := 0; i < n; i++ {
+		right[i] = n
+	}
+	mono_stack := []int{}
+	for i := 0; i < n; i++ {
+		for len(mono_stack) > 0 && heights[mono_stack[len(mono_stack)-1]] >= heights[i] {
+			right[mono_stack[len(mono_stack)-1]] = i
+			mono_stack = mono_stack[:len(mono_stack)-1]
+		}
+		if len(mono_stack) == 0 {
+			left[i] = -1
+		} else {
+			left[i] = mono_stack[len(mono_stack)-1]
+		}
+		mono_stack = append(mono_stack, i)
+	}
+	ans := 0
+	for i := 0; i < n; i++ {
+		ans = max(ans, (right[i]-left[i]-1)*heights[i])
+	}
+	return ans
+}
+
+func max(x, y int) int {
+	if x > y {
+		return x
+	}
+	return y
+}
+
+func largestRectangleArea1(heights []int) int {
 	if len(heights) < 1 {
 		return math.MinInt64
 	}
 	if len(heights) == 1 {
 		return heights[0]
 	}
-	var maxStack []Area
+	var maxStack []Bar
 	var maxArea int
-	maxStack = append(maxStack, Area{heights[0], 1})
-	for i := 1; i < len(heights); i++ {
+	maxStack = append(maxStack, Bar{-1, -1})
+	for i := 0; i < len(heights); i++ {
 		currentHeight := heights[i]
 		top := maxStack[len(maxStack)-1].height
 		if currentHeight >= top {
-			maxStack = append(maxStack, Area{currentHeight, 0})
-			for j, _ := range maxStack {
-				maxStack[j].width++
-			}
+			maxStack = append(maxStack, Bar{currentHeight, i})
 		} else {
-			for j := len(maxStack) - 1; j >= 0; j-- {
-				if maxStack[j].height > currentHeight {
-					area := maxStack[j].width * maxStack[j].height
+			// 找到第一个不大于currentHeight的位置
+			for pos := len(maxStack) - 1; pos >= 0; pos-- {
+				if maxStack[pos].height > currentHeight {
+					area := (i - maxStack[pos-1].index - 1) * maxStack[pos].height
 					if maxArea < area {
 						maxArea = area
 					}
-
 					maxStack = maxStack[:len(maxStack)-1]
-
-					maxStack = append(maxStack, Area{currentHeight, 1})
 				} else {
-					maxStack[j].width++
-					maxStack = append(maxStack, Area{currentHeight, 1})
 					break
 				}
 			}
-			maxStack = append(maxStack, Area{currentHeight, 1})
+			maxStack = append(maxStack, Bar{currentHeight, i})
 		}
 	}
 
-	for _, v := range maxStack {
-		area := v.width * v.height
+	max := maxStack[len(maxStack)-1].index
+	for i := 1; i < len(maxStack); i++ {
+		area := (max - maxStack[i-1].index) * maxStack[i].height
 		if maxArea < area {
 			maxArea = area
 		}
